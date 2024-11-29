@@ -63,6 +63,7 @@ Route::prefix('recruiter')->group(function () {
     Route::middleware('auth:sanctum')->get('/profile', [RecruiterController::class, 'getRecruiterProfile']);
     Route::middleware('auth:sanctum')->put('/update/{id}',[RecruiterController::class, 'update']);
     Route::middleware('auth:sanctum')->get('/getVacancies', [RecruiterController::class, 'getRecruiterVacancies']);
+    Route::middleware('auth:sanctum')->get('/getVacancies/{id}', [RecruiterController::class, 'getRecruiterVacanciesID']);
     Route::middleware('auth:sanctum')->get('/getUsersForVacancies/{ApplyId}',[ApplicationController::class, 'getUsersForVacancies']);
 });
 

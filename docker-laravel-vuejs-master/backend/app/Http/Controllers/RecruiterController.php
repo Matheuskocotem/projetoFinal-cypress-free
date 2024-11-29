@@ -13,9 +13,10 @@ use PharIo\Manifest\Author;
 
 class RecruiterController extends Controller
 {
-    public function registerRecruiter(Request $request){
+    public function registerRecruiter(Request $request)
+    {
 
-        $array =  $request->validate([
+        $array = $request->validate([
             'company_name' => 'required|string|max:100',
             'cnpj' => 'required|string|max:14|unique:recruiters',
             'social_name' => 'required|string|max:100',
@@ -42,8 +43,8 @@ class RecruiterController extends Controller
 
         return response()->json([
             'message' => 'Recrutador cadastrado com sucesso! ',
-            'recruiter'=>$recruiter,
-            ]);
+            'recruiter' => $recruiter,
+        ]);
     }
 
     public function getRecruiterVacancies()
@@ -60,7 +61,28 @@ class RecruiterController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id){
+    public function getRecruiterVacanciesID($id)
+    {
+        $recruiter = Auth::user();
+
+        if (!$recruiter) {
+            return response()->json(['message' => 'Usuário não autenticado. Faça login como recrutador.'], 401);
+        }
+
+        if ($recruiter->id != $id) {
+            return response()->json(['message' => 'Acesso negado. Você não tem permissão para visualizar as vagas desse recrutador.'], 403);
+        }
+
+        $vacancies = $recruiter->find($id)->vacancies;
+
+        return response()->json([
+            'message' => 'Vagas encontradas com sucesso!',
+            'vacancies' => $vacancies,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
 
         $user = Auth::user();
 
